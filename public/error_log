@@ -1,0 +1,1 @@
+[13-Mar-2024 11:50:36 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\Admin\RoomTypeController::checkRoomAvailability() in /home2/simbitx6/kdgh.simbillsoft.in/app/Http/Controllers/Admin/RoomTypeController.php on line 247
