@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\BookingActions;
 use App\Constants\Status;
+use PDF;
+use Illuminate\Support\Facades\DB;
 
 use App\Mail\ReservationSuccess;
 use Carbon\Carbon;
@@ -240,6 +242,8 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+
+        //r
         $validator = Validator::make($request->all(), [
             'room_type_id'    => 'required|integer|gt:0',
             'guest_name'      => 'required',
@@ -818,4 +822,24 @@ class ReservationController extends Controller
 
         return view('admin.invoices.invoice', compact('booking','payment_method'));
     }
+    public function daily_pdf(Request $request){
+        $startDate = $request->input('start_date', now()->toDateString());
+        $endDate = $request->input('end_date', now()->toDateString());
+        
+        $bookings = Booking::select(DB::raw('bookings.id as booking_id, receipt_number,payment_modes.id as payment_mode_id,
+        SUM(CASE WHEN payment_logs.payment_mode_id = "1" THEN payment_logs.amount ELSE 0 END) AS cash_collection,
+                SUM(CASE WHEN payment_logs.payment_mode_id = "2" THEN payment_logs.amount ELSE 0 END) AS card_collection,
+                SUM(CASE WHEN payment_logs.payment_mode_id = "3" THEN payment_logs.amount ELSE 0 END) AS upi_collection,
+                SUM(payment_logs.amount) AS total_collection'))
+           ->join('booked_rooms', 'bookings.id', '=', 'booked_rooms.booking_id')
+            ->join('payment_logs', 'bookings.id', '=', 'payment_logs.booking_id')
+            ->whereDate('payment_logs.created_at', '>=', $startDate)//staring date
+            ->whereDate('payment_logs.created_at', '<=', $endDate)//ending date
+            ->join('payment_modes', 'payment_logs.payment_mode_id', '=', 'payment_modes.id')
+            ->groupBy('booking_id','.payment_modes.id','receipt_number') 
+            ->get();
+
+        return view('admin.reports.daily_pdf',compact('bookings','startDate','endDate'));
+    }
+    
 }

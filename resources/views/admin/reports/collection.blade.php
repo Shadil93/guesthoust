@@ -53,6 +53,7 @@
                                             <input type="date" id="end_date" name="end_date" class="form-control" onchange="submitForm()" value="{{ $endDate ?? now()->toDateString() }}">
                                         </div>
                                     </div>
+                                    <!--pdf download-->
                                     <div class="col-md-3">
                                         <a href="{{ route('reports.collection', ['start_date' => $startDate, 'end_date' => $endDate, 'pdf' => 1]) }}" class="btn btn-danger mx-3 mt-4">Download PDF</a>
                                     </div>

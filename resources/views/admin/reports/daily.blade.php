@@ -2,10 +2,29 @@
 
 @section('main')
 
+    <style type="text/css">
+    	body{
+         margin-top:20px;
+        background-color:#eee;
+}
+.custom-table { border-collapse: collapse; width: 100%;}
+.custom-table th, .custom-table td { border: 1px solid #dee2e6; padding: 10px; text-align: center; }
 
-<style>
-    .custom-table { border-collapse: collapse; width: 100%;}
-    .custom-table th, .custom-table td { border: 1px solid #dee2e6; padding: 10px; text-align: center; }
+.card {
+    box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+}
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid rgba(0,0,0,.125);
+    border-radius: 1rem;
+}
+    </style>
 </style>
 
 <div class="container-fluid py-4">
@@ -37,18 +56,29 @@
                                             <input type="date" id="start_date" name="start_date" class="form-control" value="{{ $startDate ?? now()->toDateString() }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="end_date">End Date:</label>
                                             <input type="date" id="end_date" name="end_date" class="form-control" value="{{ $endDate ?? now()->toDateString() }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-2 mt-4">
+                                    <div class="col-md-5 mt-4 mr-2">
                                         <button type="submit" class="btn btn-primary">Submit</button>
+                                        <a href="{{ route('reports.daily', ['start_date' => $startDate, 'end_date' => $endDate, 'pdf' => 1]) }}" class="btn btn-danger">Download PDF</a>
+                                        <a href="{{ route('daily_pdf',) }}" class="btn btn-info font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Print" target="_blank">  Print </a>
                                     </div>
-                                    <div class="col-md-3 mt-4">
-                                        <!-- <a href="{{ route('reports.daily', ['start_date' => $startDate, 'end_date' => $endDate, 'pdf' => 1]) }}" class="btn btn-danger">Download PDF</a> -->
+                                    <div class="col-md- mt-4">
+                                        
                                     </div>
+                                    <div class="col-md-2 mt-4 ml-4">
+                                     
+                                    </div>
+                                    <!-- <div class="col-md-4 mt-5">
+                                    <a href="{{ route('daily_pdf') }}" class="btn btn-info font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Print" target="_blank">
+                                        Print 
+                                    </a>
+                                     </div> -->
+
                                 </div>
                             </form>
                         </div>
@@ -110,6 +140,7 @@
             </div>
 </div>
 </div>
+
 
 
 

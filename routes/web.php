@@ -96,6 +96,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/collection', [ReportController::class, 'collection'])->name('reports.collection');
     Route::get('/reports/bookings', [ReportController::class, 'bookings'])->name('reports.bookings');
     Route::get('/reports/daily',[ReportController::class,'daily'])->name('reports.daily');
+
+
+    Route::get('/daily_pdf',[ReservationController::class,'daily_pdf'])->name('daily_pdf');
+    Route::get('/yearly_pdf',[ReportController::class,'yearly_pdf'])->name('yearly_pdf');
+    Route::get('/monthly_pdf',[ReportController::class,'monthly_pdf'])->name('monthly_pdf');
   
 });
 

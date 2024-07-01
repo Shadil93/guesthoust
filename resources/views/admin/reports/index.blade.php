@@ -51,8 +51,9 @@
                                         </select>
                                     </form>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 mt-1 mr-2">
                                     <a href="{{ route('reports.monthly', ['selected_month' => $selectedMonth->format('Y-m'), 'pdf' => 1]) }}" class="btn btn-danger mx-3">Download PDF</a>
+                                    <a href="{{ route('monthly_pdf',) }}" class="btn btn-info font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Print" target="_blank">  Print </a>
                                 </div>
                             </div>
                       </div>
@@ -71,31 +72,47 @@
                                   <tr>
                                       <th>Date</th>
                                       <th>Number of Bookings</th>
+                                      <th>Cash</th>
+                                      <th>Card</th>
+                                      <th>UPI</th>
                                       <th>Total Collection</th>
                                   </tr>
                               </thead>
                               <tbody>
-                                  @php
-                                      $grandTotalCollection = 0;
-                                      $grandTotalBooking = 0;
-                                  @endphp
-                                  @foreach ($bookings as $date => $bookingData)
-                                      @php
-                                          $grandTotalBooking += $bookingData['bookingCount'];
-                                          $grandTotalCollection += $bookingData['totalCollection'];
-                                      @endphp
-                                      <tr>
-                                          <td>{{ \Carbon\Carbon::parse($bookingData->date )->format('d-m-Y') }}</td>
-                                          <td>{{ $bookingData->bookingCount }}</td>
-                                          <td>{{ $bookingData->totalCollection }}</td>
-                                      </tr>
-                                  @endforeach
-                                  <tr>
-                                      <td><strong>Grand Total</strong></td>
-                                      <td><strong>{{ $grandTotalBooking }}</strong></td>
-                                      <td><strong>{{ $grandTotalCollection }}</strong></td>
-                                  </tr>
-                              </tbody>
+    @php
+        $grandTotalBooking = 0;
+        $grandcash = 0;
+        $grandcard = 0;
+        $grandUPI = 0;
+        $grandTotalCollection = 0;
+    @endphp
+    @foreach ($bookings as $bookingData)
+        @php
+            $grandTotalBooking += $bookingData->bookingCount;
+            $grandcash += $bookingData->cash_collection;
+            $grandcard += $bookingData->card_collection;
+            $grandUPI += $bookingData->upi_collection;
+            $grandTotalCollection += $bookingData->totalCollection;
+        @endphp
+        <tr>
+            <td>{{ \Carbon\Carbon::parse($bookingData->date)->format('d-m-Y') }}</td>
+            <td>{{ $bookingData->bookingCount }}</td>
+            <td>{{ $bookingData->cash_collection }}</td>
+            <td>{{ $bookingData->card_collection }}</td>
+            <td>{{ $bookingData->upi_collection }}</td>
+            <td>{{ $bookingData->totalCollection }}</td>
+        </tr>
+    @endforeach
+    <tr>
+        <td><strong>Grand Total</strong></td>
+        <td><strong>{{ $grandTotalBooking }}</strong></td>
+        <td><strong>{{$grandcash}}</strong></td> 
+        <td><strong>{{$grandcard}}</strong></td>
+        <td><strong>{{$grandUPI}}</strong></td>
+        <td><strong>{{ $grandTotalCollection }}</strong></td>
+    </tr>
+</tbody>
+
                           </table>
                       </div>
                   </div>
